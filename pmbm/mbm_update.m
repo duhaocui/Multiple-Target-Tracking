@@ -1,4 +1,8 @@
-function [ wupd, rupd, xupd, Pupd ] = mbm_update( z, n, r, x, P, model )
+function [ wupd, rupd, xupd, Pupd ] = mbm_update( z, n, gating_mb, model )
+
+r = gating_mb.r;
+x = gating_mb.x;
+P = gating_mb.P;
 
 % Interpret sizes from inputs
 Pd = model.Pd;

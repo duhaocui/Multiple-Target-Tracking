@@ -29,9 +29,9 @@ model.lfai= 10;                             %poisson average rate of uniform clu
 model.range_c= [ -1000 1000; -1000 1000 ];      %uniform clutter region
 model.lambda_fa= model.lfai/prod(model.range_c(:,2)-model.range_c(:,1)); %uniform clutter density
 
-model.threshold = 1e-3; % Threshold for pruning low weights track
-model.H_max = 50; % capping threshold
-model.H_threshold = 1e-3; % Pruning threshold
+model.threshold = 1e-4; % Threshold for pruning low weights track
+model.H_max = 100; % capping threshold
+model.H_threshold = 1e-4; % Pruning threshold
 
 % Initialise new target parameter structure
 birthNum = 4;
@@ -47,6 +47,6 @@ end
 model.lambdab = 0.1*ones(1,birthNum);
 
 % Gating parameters
-P_G= 0.99;                    %gate size in percentage
+P_G= 0.999;                    %gate size in percentage
 model.gamma= chi2inv(P_G,model.z_dim);   %inv chi^2 dn gamma value
 
