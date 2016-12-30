@@ -32,7 +32,7 @@ for trial = 1:numTrial
     w_update = 1;
     
     % Unknown target PPP parameters
-    lambdau = model.lambdab;
+    lambdau = model.lambdau;
     xu = model.xb;
     Pu = model.Pb;
     
