@@ -32,7 +32,7 @@ for l = 1:len
     % Gating
     [gatingGroup,gating_mb,idx_out] = group_gating(z,r{l},x{l},P{l},model);
     numGroups = length(gatingGroup);
-    [~,rout,xout,Pout] = ppp_update(lambdau{l},xu{l},Pu{l},z(:,idx_out),model);
+    [wout,rout,xout,Pout] = ppp_update(lambdau{l},xu{l},Pu{l},z(:,idx_out),model);
     
     group_r = cell(numGroups,1);
     group_x = cell(numGroups,1);
@@ -108,7 +108,7 @@ for l = 1:len
         P_re{i} = cat(3,P_re{i},Pu{l});
     end
     
-    w{l} = wMurty*w_update(l);
+    w{l} = wMurty*w_update(l)*prod(wout);
     r_update = cat(1,r_update,rMurty);
     x_update = cat(1,x_update,xMurty);
     p_update = cat(1,p_update,pMurty);

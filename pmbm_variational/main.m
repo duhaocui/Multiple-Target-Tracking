@@ -2,7 +2,7 @@ clc;clear
 dbstop if error
 
 % Generate model
-model = gen_model2;
+model = gen_model;
 
 lambdau = model.lambdau;
 xu = model.xb;
@@ -20,7 +20,7 @@ gospa_vals= zeros(100,4,numTrial);
 
 for trial = 1:numTrial
     % Generate ground truth
-    truth = gen_truth2(model);
+    truth = gen_truth(model);
     
     % Generate measurements
     meas =  gen_meas(model,truth);

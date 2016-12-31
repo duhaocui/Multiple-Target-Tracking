@@ -1,7 +1,7 @@
 clc;clear
 dbstop if error
 % Generate model
-model= gen_model2;
+model= gen_model;
 
 % Monte Carlo simulations
 numTrial = 1;
@@ -15,7 +15,7 @@ gospa_vals= zeros(K,4,numTrial);
 
 for trial = 1:numTrial
     %Generate ground truth
-    truth= gen_truth2(model);
+    truth= gen_truth(model);
     
     % Generate measurements
     meas=  gen_meas(model,truth);
