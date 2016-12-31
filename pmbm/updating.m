@@ -58,7 +58,7 @@ for l = 1:len
         Wp2 = Wp/sum(Wp);
         [Wp3,order] = sort(Wp2,'descend');
         Y = cumsum(Wp3);
-        pos = find(Y>=0.99,1);
+        pos = find(Y>=0.999,1);
         group_w{g} = Wp(order(1:pos));
         group_r{g} = group_r{g}(:,order(1:pos));
         group_x{g} = group_x{g}(:,:,order(1:pos));

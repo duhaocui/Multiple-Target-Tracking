@@ -23,7 +23,7 @@ model.D= diag([ 1; 1 ]);
 model.R= model.D*model.D';         %observation noise covariance
 
 % detection parameters
-model.Pd= .98;   %probability of detection in measurements
+model.Pd= .75;   %probability of detection in measurements
 
 % clutter parameters
 model.lfai= 10;                             %poisson average rate of uniform clutter (per scan)

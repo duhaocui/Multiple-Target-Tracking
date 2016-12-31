@@ -4,7 +4,6 @@ function truth= gen_truth(model)
 truth.K= 100;                   %length of data/number of scans
 truth.X= cell(truth.K,1);             %ground truth for states of targets  
 truth.N= zeros(truth.K,1);            %ground truth for number of targets
-%truth.L= cell(truth.K,1);             %ground truth for labels of targets (k,i)
 truth.track_list= cell(truth.K,1);    %absolute index target identities (plotting)
 truth.total_tracks= 0;          %total number of appearing tracks
 
