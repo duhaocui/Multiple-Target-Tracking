@@ -1,4 +1,4 @@
-function model= gen_model
+function model= gen_model3
 
 % basic parameters
 model.x_dim= 4;   %dimension of state vector
@@ -29,9 +29,9 @@ model.lfai= 10;                             %poisson average rate of uniform clu
 model.range_c= [ -1000 1000; -1000 1000 ];      %uniform clutter region
 model.lambda_fa= model.lfai/prod(model.range_c(:,2)-model.range_c(:,1)); %uniform clutter density
 
-model.threshold = 1e-4; % Threshold for pruning low weights track
+model.threshold = 1e-3; % Threshold for pruning low weights track
 model.H_max = 100; % capping threshold
-model.H_threshold = 1e-4; % Pruning threshold
+model.H_threshold = 1e-3; % Pruning threshold
 model.recycleThreshold = 1e-1;
 
 % Initialise new target parameter structure
@@ -45,7 +45,7 @@ model.Pb = zeros(4,4,birthNum);
 for i = 1:birthNum
     model.Pb(:,:,i) = diag([ 10; 10; 10; 10 ])*diag([ 10; 10; 10; 10 ])';
 end
-model.lambdab = 0.1*ones(1,birthNum);
+model.lambdab = 0.1*ones(birthNum,1);
 
 % Gating parameters
 P_G= 0.999;                    %gate size in percentage

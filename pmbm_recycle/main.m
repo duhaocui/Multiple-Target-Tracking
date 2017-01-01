@@ -1,7 +1,7 @@
 clc;clear
 dbstop if error
 % Generate model
-model= gen_model;
+model= gen_model3;
 
 % Monte Carlo simulations
 numTrial = 1;
@@ -15,7 +15,7 @@ gospa_vals= zeros(K,4,numTrial);
 
 for trial = 1:numTrial
     %Generate ground truth
-    truth= gen_truth(model);
+    truth= gen_truth3(model);
     
     % Generate measurements
     meas=  gen_meas(model,truth);
@@ -32,7 +32,7 @@ for trial = 1:numTrial
     w_update = 1;
     
     % Unknown target PPP parameters
-    lambdau{1} = model.lambdau;
+    lambdau{1} = model.lambdab;
     xu{1} = model.xb;
     Pu{1} = model.Pb;
     

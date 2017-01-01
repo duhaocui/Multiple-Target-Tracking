@@ -33,7 +33,7 @@ for l = 1:len
     end
     
     % Incorporate birth intensity into PPP
-    lambdau{l} = [lambdau{l};lambdab'];
+    lambdau{l} = [lambdau{l};lambdab];
     xu{l} = [xu{l} xb];
     Pu{l} = cat(3,Pu{l},Pb);
     

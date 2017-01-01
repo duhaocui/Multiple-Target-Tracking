@@ -1,4 +1,4 @@
-function truth= gen_truth(model)
+function truth= gen_truth3(model)
 
 %variables
 truth.K= 100;                   %length of data/number of scans
@@ -29,7 +29,8 @@ xstart(:,12)  = [ -200; 15; 800; -5 ];      tbirth(12)  = 80;   tdeath(12) = tru
 
 %generate the tracks
 for targetnum=1:nbirths
-    targetstate = xstart(:,targetnum);
+    % randomly sampled from birth intensity
+    targetstate = mvnrnd(xstart(:,targetnum),diag([ 10; 0; 10; 0 ])*diag([ 10; 0; 10; 0 ])')';
     for k=tbirth(targetnum):min(tdeath(targetnum),truth.K)
         targetstate = gen_newstate_fn(model,targetstate,'noise');
         truth.X{k}= [truth.X{k} targetstate];

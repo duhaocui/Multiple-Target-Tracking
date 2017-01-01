@@ -1,4 +1,4 @@
-function model= gen_model
+function model= gen_model3
 
 % basic parameters
 model.x_dim= 4;   %dimension of state vector
