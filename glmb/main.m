@@ -1,6 +1,6 @@
 numTrial = 1;
-model= gen_model2;
-truth= gen_truth2(model);
+model= gen_model;
+truth= gen_truth(model);
 % GOSPA parameters
 gospa_p= 1;
 gospa_c= 100;
