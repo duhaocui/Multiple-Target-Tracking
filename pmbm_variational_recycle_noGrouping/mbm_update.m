@@ -28,7 +28,11 @@ for i = 1:n
     rupd(:,2:end) = 1;
     for j = 1:m
         v = z(:,j) - H*x(:,i);
-        wupd(i,j+1) = r(i)*Pd*mvnpdf(v,0,S);
+        try
+            wupd(i,j+1) = r(i)*Pd*mvnpdf(v,0,S);
+        catch
+            wupd(i,j+1) = eps;
+        end
         xupd(:,i,j+1) = x(:,i) + K*v;
         Pupd(:,:,i,j+1) = Pplus;
     end

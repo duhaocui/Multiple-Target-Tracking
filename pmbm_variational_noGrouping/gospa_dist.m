@@ -1,4 +1,4 @@
-function [ error,dist_error,miss_error,false_error ] = gospa_dist( X,Y,c,p,alpha )
+function [ Error ] = gospa_dist( X,Y,c,p,alpha )
 
 %Calculate sizes of the input point patterns
 n = size(X,2);
@@ -9,7 +9,7 @@ if isempty(Y)
     miss_error = n*c^p/2;
     false_error= 0;
     error = n*c^p/2;
-    
+    Error = [error dist_error miss_error false_error];
     return;
 end
 
@@ -35,6 +35,8 @@ temp = D.*assignment(:,1:m);
 dist_error = sum(temp(:));
 
 error = dist_error + miss_error + false_error;
+
+Error = [error dist_error miss_error false_error];
 
 end
 
