@@ -28,8 +28,8 @@ parfor trial = 1:numTrial
     P = zeros(dim,dim,n);
     
     % Unknown target PPP parameters
-    lambdau = model.lambdab;
-    %lambdau = model.lambdau;
+    %lambdau = model.lambdab;
+    lambdau = model.lambdau;
     xu = model.xb;
     Pu = model.Pb;
     
