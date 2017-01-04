@@ -4,7 +4,7 @@ dbstop if error
 model= gen_model2;
 
 % Monte Carlo simulations
-numTrial = 1;
+numTrial = 100;
 K = 101; % time steps
 
 % GOSPA parameters
@@ -13,7 +13,7 @@ gospa_c= 100;
 gospa_alpha= 2;
 gospa_vals= zeros(K,4,numTrial);
 
-for trial = 1:numTrial
+parfor trial = 1:numTrial
     %Generate ground truth
     truth= gen_truth2(model);
     
@@ -32,7 +32,7 @@ for trial = 1:numTrial
     w_update = 1;
     
     % Unknown target PPP parameters
-    lambdau = model.lambdab;
+    lambdau = model.lambdau;
     xu = model.xb;
     Pu = model.Pb;
     
