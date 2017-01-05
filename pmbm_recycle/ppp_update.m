@@ -32,7 +32,11 @@ C = zeros(m,1);
 for j = 1:m
     for k = 1:nu
         v = z(:,j) - H*xu(:,k);
-        ck(k) = lambdau(k)*Pd*mvnpdf(v,0,Sk(:,:,k));
+        try
+            ck(k) = lambdau(k)*Pd*mvnpdf(v,0,Sk(:,:,k));
+        catch
+            ck(k) = eps;
+        end
         yk(:,k) = xu(:,k) + Kk(:,:,k)*v;
     end
     

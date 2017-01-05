@@ -1,11 +1,11 @@
 clc;clear
 dbstop if error
 % Generate model
-model= gen_model3;
+model= gen_model2;
 
 % Monte Carlo simulations
-numTrial = 1;
-K = 100; % time steps
+numTrial = 100;
+K = 101; % time steps
 
 % GOSPA parameters
 gospa_p= 1;
@@ -13,9 +13,9 @@ gospa_c= 100;
 gospa_alpha= 2;
 gospa_vals= zeros(K,4,numTrial);
 
-for trial = 1:numTrial
+parfor trial = 1:numTrial
     %Generate ground truth
-    truth= gen_truth3(model);
+    truth= gen_truth2(model);
     
     % Generate measurements
     meas=  gen_meas(model,truth);
@@ -32,13 +32,13 @@ for trial = 1:numTrial
     w_update = 1;
     
     % Unknown target PPP parameters
-    lambdau{1} = model.lambdab;
+    lambdau{1} = model.lambdau;
     xu{1} = model.xb;
     Pu{1} = model.Pb;
     
     % Loop through time
     for t = 1:K
-        t
+        
         % Predict
         [r,x,P,lambdau,xu,Pu] = predict(r,x,P,lambdau,xu,Pu,model);
         
@@ -47,12 +47,10 @@ for trial = 1:numTrial
             updating(lambdau,xu,Pu,r,x,P,meas.Z{t},model,w_update);
         
         % Performance evaluation using GOSPA metric
-        [gospa_vals(t,1,trial), gospa_vals(t,2,trial),...
-            gospa_vals(t,3,trial), gospa_vals(t,4,trial)] = ...
-            gospa_dist(get_comps(truth.X{t},[1 3]),get_comps(x_est,[1 3])...
-            ,gospa_c,gospa_p,gospa_alpha);
+        [gospa_vals(t,:,trial)] = gospa_dist(get_comps(truth.X{t},[1 3]),...
+            get_comps(x_est,[1 3]) ,gospa_c,gospa_p,gospa_alpha);
     end
-    trial
+    
     
 end
 

@@ -23,16 +23,16 @@ model.D= diag([ 1; 1 ]);
 model.R= model.D*model.D';         %observation noise covariance
 
 % detection parameters
-model.Pd= .98;   %probability of detection in measurements
+model.Pd= .75;   %probability of detection in measurements
 
 % clutter parameters
 model.lfai= 10;                             %poisson average rate of uniform clutter (per scan)
 model.range_c= [ -100 100; -100 100 ];      %uniform clutter region
 model.lambda_fa= model.lfai/prod(model.range_c(:,2)-model.range_c(:,1)); %uniform clutter density
 
-model.threshold = 1e-4; % Threshold for pruning low weights track
+model.threshold = 1e-3; % Threshold for pruning low weights track
 model.H_max = 100; % capping threshold
-model.H_threshold = 1e-4; % Pruning threshold
+model.H_threshold = 1e-3; % Pruning threshold
 model.recycleThreshold = 1e-1;
 
 % Initialise new target parameter structure
@@ -43,6 +43,6 @@ model.lambdab = 0.1;
 model.lambdau = 10;
 
 % Gating parameters
-P_G= 0.99;                    %gate size in percentage
+P_G= 0.999;                    %gate size in percentage
 model.gamma= chi2inv(P_G,model.z_dim);   %inv chi^2 dn gamma value
 

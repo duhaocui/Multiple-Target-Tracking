@@ -13,7 +13,8 @@ gospa_c= 100;
 gospa_alpha= 2;
 gospa_vals= zeros(K,4,numTrial);
 
-parfor trial = 1:numTrial
+for trial = 1:numTrial
+    trial
     %Generate ground truth
     truth= gen_truth2(model);
     
@@ -38,7 +39,7 @@ parfor trial = 1:numTrial
     
     % Loop through time
     for t = 1:K
-        
+        t
         % Predict
         [r,x,P,lambdau,xu,Pu] = predict(r,x,P,lambdau,xu,Pu,model);
         
