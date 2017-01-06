@@ -10,16 +10,16 @@ est.L= cell(meas.K,1);
 
 %filter parameters
 filter.T_max= 100;                  %maximum number of tracks
-filter.track_threshold= 1e-4;       %threshold to prune tracks
+filter.track_threshold= 1e-3;       %threshold to prune tracks
 
 filter.H_bth= 20;                    %requested number of birth components/hypotheses (for LMB to GLMB casting before update)
 filter.H_sur= 20;                  %requested number of surviving components/hypotheses (for LMB to GLMB casting before update)
 filter.H_upd= 100;                  %requested number of updated components/hypotheses (for GLMB update)
 filter.H_max= 100;                  %cap on number of posterior components/hypotheses (not used yet)
-filter.hyp_threshold= 1e-4;        %pruning threshold for components/hypotheses (not used yet)
+filter.hyp_threshold= 1e-3;        %pruning threshold for components/hypotheses (not used yet)
 
 filter.L_max= 20;                   %limit on number of Gaussians in each track
-filter.elim_threshold= 1e-4;        %pruning threshold for Gaussians in each track
+filter.elim_threshold= 1e-3;        %pruning threshold for Gaussians in each track
 filter.merge_threshold= 4;          %merging threshold for Gaussians in each track
 
 filter.P_G= 0.999;                           %gate size in percentage
@@ -34,7 +34,7 @@ tt_lmb_update= cell(0,1);      %track table for LMB (cell array of structs for i
 
 %recursive filtering
 for k=1:meas.K
-    k
+    
     %prediction
     [tt_lmb_birth,tt_lmb_survive]= lmbpredict(tt_lmb_update,model,k);
     

@@ -1,7 +1,5 @@
 function est = run_filter(model,meas)
 
-%---
-
 %=== Setup
 
 %output variables
@@ -14,15 +12,14 @@ filter.H_bth= 20;                    %requested number of birth components/hypot
 filter.H_sur= 20;                 %requested number of surviving components/hypotheses
 filter.H_upd= 100;                 %requested number of updated components/hypotheses
 filter.H_max= 100;                 %cap on number of posterior components/hypotheses
-filter.hyp_threshold= 1e-4;        %pruning threshold for components/hypotheses
+filter.hyp_threshold= 1e-3;        %pruning threshold for components/hypotheses
 
 filter.L_max= 100;                  %limit on number of Gaussians in each track - not implemented yet
-filter.elim_threshold= 1e-4;        %pruning threshold for Gaussians in each track - not implemented yet
+filter.elim_threshold= 1e-3;        %pruning threshold for Gaussians in each track - not implemented yet
 filter.merge_threshold= 4;          %merging threshold for Gaussians in each track - not implemented yet
 
 filter.P_G= 0.999;                           %gate size in percentage
 filter.gamma= chi2inv(filter.P_G,model.z_dim);   %inv chi^2 dn gamma value
-
 
 
 est.filter= filter;
@@ -38,7 +35,7 @@ glmb_update.cdn= 1;             %cardinality distribution of GLMB (vector of car
 
 %recursive filtering
 for k=1:meas.K
-    k
+    
     %prediction and update
     glmb_predict= predict(glmb_update,model,filter,k);          
     glmb_update= update(glmb_predict,model,filter,meas,k);     

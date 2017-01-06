@@ -40,11 +40,11 @@ model.D= diag([ 1; 1 ]);
 model.R= model.D*model.D';              %observation noise covariance
 
 % detection parameters
-model.P_D= .98;   %probability of detection in measurements
+model.P_D= .75;   %probability of detection in measurements
 model.Q_D= 1-model.P_D; %probability of missed detection in measurements
 
 % clutter parameters
-model.lambda_c= 10;                             %poisson average rate of uniform clutter (per scan)
+model.lambda_c= 30;                             %poisson average rate of uniform clutter (per scan)
 model.range_c= [ -100 100; -100 100 ];      %uniform clutter region
 model.pdf_c= 1/prod(model.range_c(:,2)-model.range_c(:,1)); %uniform clutter density
 

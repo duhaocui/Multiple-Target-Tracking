@@ -32,7 +32,7 @@ xstart(:,12)  = [ -200; 15; 800; -5 ];      tbirth(12)  = 80;   tdeath(12) = tru
 for targetnum=1:nbirths
     targetstate = mvnrnd(xstart(:,targetnum),diag([ 10; 0; 10; 0 ])*diag([ 10; 0; 10; 0 ])')';
     for k=tbirth(targetnum):min(tdeath(targetnum),truth.K)
-        targetstate = gen_newstate_fn(model,targetstate,'noiseless');
+        targetstate = gen_newstate_fn(model,targetstate,'noise');
         truth.X{k}= [truth.X{k} targetstate];
         truth.track_list{k} = [truth.track_list{k} targetnum];
         truth.N(k) = truth.N(k) + 1;
