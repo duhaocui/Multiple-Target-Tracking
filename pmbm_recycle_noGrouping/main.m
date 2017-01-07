@@ -41,7 +41,7 @@ parfor trial = 1:numTrial
     Pu{1} = model.Pb;
     
     for t = 1:K
-        t
+        
         % Predict
         [r,x,P,lambdau,xu,Pu] = predict(r,x,P,lambdau,xu,Pu,model);
         
