@@ -3,7 +3,7 @@ dbstop if error
 % Generate model
 model= gen_model2;
 % Monte Carlo simulations
-numTrial = 100;
+numTrial = 1;
 K = 101;
 % GOSPA parameters
 gospa_p= 1;
@@ -12,7 +12,7 @@ gospa_alpha= 2;
 
 gospa_vals= zeros(K,4,numTrial);
 
-parfor trial = 1:numTrial
+for trial = 1:numTrial
     % Generate ground truth
     truth= gen_truth2(model);
     

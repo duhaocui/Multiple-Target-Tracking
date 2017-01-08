@@ -8,7 +8,7 @@ v = zeros(dim,H,N);
 
 phi = phi + eps;
 r_hat = (h_r*phi)';
-r_hat(r_hat>=1) = 1-eps;
+% r_hat(r_hat>=1) = 1-eps;
 
 for j = 1:N
     x_hat(:,j) = sum(repmat(h_r.*phi(:,j)',dim,1).*h_x,2)/r_hat(j);

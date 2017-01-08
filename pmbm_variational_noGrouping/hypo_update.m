@@ -27,7 +27,7 @@ else
         [C,r_temp,x_temp,P_temp] = cost(phi,h_r,h_x,h_p,model);
         [Cmin,phi] = LP_transport(C,pn,ph);
         iteration = iteration + 1;
-        if (temp - Cmin < 1e-3 && temp >= Cmin) || (iteration > maxIterations)
+        if (abs(temp - Cmin) < 1e-3) || (iteration > maxIterations)
             indicator = 1;
             r_hat = r_temp;
             x_hat = x_temp;
