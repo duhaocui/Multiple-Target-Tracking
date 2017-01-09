@@ -13,7 +13,7 @@ for k = 1:M
     P = zeros(dim,dim,n+m);
     for i = 1:m
         if bestAssign(k,i) <= n
-            r(bestAssign(k,i)) = 1;
+            r(bestAssign(k,i)) = 1-eps;
             x(:,bestAssign(k,i)) = xupd(:,bestAssign(k,i),i+1);
             P(:,:,bestAssign(k,i)) = Pupd(:,:,bestAssign(k,i),i+1);
         else

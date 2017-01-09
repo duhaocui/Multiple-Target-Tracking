@@ -23,14 +23,14 @@ model.D= diag([ 1; 1 ]);
 model.R= model.D*model.D';              %observation noise covariance
 
 % detection parameters
-model.Pd= 0.75;   %probability of detection in measurements
+model.Pd= 0.98;   %probability of detection in measurements
 
 % clutter parameters
-model.lfai= 30;                             %poisson average rate of uniform clutter (per scan)
+model.lfai= 10;                             %poisson average rate of uniform clutter (per scan)
 model.range_c= [ -100 100; -100 100 ];      %uniform clutter region
 model.lambda_fa= model.lfai/prod(model.range_c(:,2)-model.range_c(:,1)); %uniform clutter density
 
-model.M = 20;
+model.M = 50;
 model.threshold = 1e-3; % Threshold for pruning low weights track
 model.H_max = 100; % capping threshold
 model.H_threshold = 1e-3; % Pruning threshold

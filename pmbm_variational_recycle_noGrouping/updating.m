@@ -24,13 +24,20 @@ cost = -log(wupd(:,2:end)./repmat(wupd(:,1),1,m));
 [bestAssign, nCost] = mbestwrap_updt_custom(cost,model.M,wnew);
 
 % Update single target hypothesis
-[r_update,x_update,p_update,r_recycle,x_recycle,p_recycle] = ...
-    hypo_update(bestAssign,rupd,xupd,Pupd,...
+[r_update,x_update,p_update] = hypo_update(bestAssign,rupd,xupd,Pupd,...
     rnew,xnew,Pnew,rout,xout,Pout,n,m,model,nCost);
-
-lambdau = [lambdau;r_recycle];
-xu = [xu x_recycle];
-Pu = cat(3,Pu,p_recycle);
 
 % Best state extraction
 x_est = state_extract(r_update,x_update);
+
+% Prune and recycle low track weights
+idx = r_update <= model.recycleThreshold;
+lambdau = [lambdau;r_update(idx)];
+xu = [xu x_update(:,idx)];
+Pu = cat(3,Pu,p_update(:,:,idx));
+
+idx = r_update > model.recycleThreshold;
+r_update = r_update(idx);
+x_update = x_update(:,idx);
+p_update = p_update(:,:,idx);
+

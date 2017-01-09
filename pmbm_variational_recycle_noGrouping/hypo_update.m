@@ -1,4 +1,4 @@
-function [ r_update,x_update,p_update,r_recycle,x_recycle,p_recycle] = ...
+function [ r_update,x_update,p_update] = ...
     hypo_update( bestAssign,rupd,xupd,Pupd,rnew,xnew,Pnew,rout,xout,Pout,n,m,model,nCost )
 %Update single target hypothesis according to the assignment
 
@@ -7,9 +7,9 @@ function [ r_update,x_update,p_update,r_recycle,x_recycle,p_recycle] = ...
     xnew,Pnew,n,m,model);
 w = exp(-nCost-logsumexp(-nCost))';
 if isempty(w)
-    rr = cat(1,rr,rout);
-    xx = cat(2,xx,xout);
-    PP = cat(3,PP,Pout);
+    r_update = cat(1,rr,rout);
+    x_update = cat(2,xx,xout);
+    p_update = cat(3,PP,Pout);
 else
     % Generate q(h,j) r_h,x_h,P_h
     [pn,ph,phi,h_r,h_x,h_p] = hypo_all(w,rr,xx,PP,m,n,model);
@@ -27,7 +27,7 @@ else
         [C,r_temp,x_temp,P_temp] = cost(phi,h_r,h_x,h_p,model);
         [Cmin,phi] = LP_transport(C,pn,ph);
         iteration = iteration + 1;
-        if (temp - Cmin < 1e-3 && temp >= Cmin) || (iteration > maxIterations)
+        if (abs(temp - Cmin) < 1e-3) || (iteration > maxIterations)
             indicator = 1;
             r_hat = r_temp;
             x_hat = x_temp;
@@ -37,21 +37,11 @@ else
         end
     end
     
-    rr = cat(1,r_hat,rout);
-    xx = cat(2,x_hat,xout);
-    PP = cat(3,P_hat,Pout);
+    r_update = cat(1,r_hat,rout);
+    x_update = cat(2,x_hat,xout);
+    p_update = cat(3,P_hat,Pout);
 end
 
-% Prune low track weights
-idx = rr > model.recycleThreshold;
-r_update = rr(idx);
-x_update = xx(:,idx);
-p_update = PP(:,:,idx);
-
-idx = rr <= model.recycleThreshold;
-r_recycle = rr(idx);
-x_recycle = xx(:,idx);
-p_recycle = PP(:,:,idx);
 
 end
 
