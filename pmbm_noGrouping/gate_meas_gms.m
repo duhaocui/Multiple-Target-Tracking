@@ -1,4 +1,4 @@
-function [z_gate,valid_idx,idx_out]= gate_meas_gms(z,model,m,P)
+function [valid_idx,idx_out]= gate_meas_gms(z,model,m,P)
 
 valid_idx = [];
 zlength = size(z,2);
@@ -12,5 +12,4 @@ for j=1:plength
     dist= sum((inv_sqrt_Sj'*nu).^2);
     valid_idx= union(valid_idx,find( dist < model.gamma ));
 end
-z_gate = z(:,valid_idx);
-[~,idx_out] = setdiff(z(1,:),z_gate(1,:),'stable');
+idx_out = setdiff(1:zlength,valid_idx);

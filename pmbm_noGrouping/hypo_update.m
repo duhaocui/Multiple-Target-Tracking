@@ -1,5 +1,5 @@
 function [ rMurty,xMurty,pMurty ] = hypo_update( bestAssign,rupd,xupd,Pupd,...
-    rnew,xnew,Pnew,n,m,nCost,M,model,valid_idx,idx_out )
+    rnew,xnew,Pnew,rout,xout,Pout,n,m,nCost,M,model )
 %Update single target hypothesis according to the assignment
 if isempty(nCost)
     M = 1;
@@ -14,11 +14,11 @@ end
 
 for assign = 1:M
     [rr,xx,PP] = make_assign(assign,bestAssign,rupd,xupd,Pupd,...
-        rnew(valid_idx),xnew(:,valid_idx),Pnew(:,:,valid_idx),n,m);
+        rnew,xnew,Pnew,n,m);
     
-    rr = cat(1,rr,rnew(idx_out));
-    xx = cat(2,xx,xnew(:,idx_out));
-    PP = cat(3,PP,Pnew(:,:,idx_out));
+    rr = cat(1,rr,rout);
+    xx = cat(2,xx,xout);
+    PP = cat(3,PP,Pout);
     
     % Prune low track weights
     idx = rr > model.threshold;
