@@ -40,7 +40,7 @@ model.D= diag([ 1; 1 ]);
 model.R= model.D*model.D';              %observation noise covariance
 
 % detection parameters
-model.P_D= .98;   %probability of detection in measurements
+model.P_D= .75;   %probability of detection in measurements
 model.Q_D= 1-model.P_D; %probability of missed detection in measurements
 
 % clutter parameters
