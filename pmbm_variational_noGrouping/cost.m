@@ -6,7 +6,6 @@ x_hat = zeros(dim,N);
 P_hat = zeros(dim,dim,N);
 v = zeros(dim,H,N);
 
-phi = phi + eps;
 r_hat = (h_r*phi)';
 r_hat(r_hat>=1) = 1-eps;
 

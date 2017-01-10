@@ -10,7 +10,7 @@ for k = 1:length(simulationData)
     eval([v '= data.averGospa;']);
 end
 %%
-x = '_10_75';
+x = '_30_98';
 glmb = eval(strcat('glmb',x));
 lmb = eval(strcat('lmb_merge',x));
 pmbm = eval(strcat('pmbm',x));
