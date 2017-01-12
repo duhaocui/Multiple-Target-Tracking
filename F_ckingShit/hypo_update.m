@@ -1,4 +1,4 @@
-function [ r_update,x_update,p_update] = hypo_update( bestAssign,rupd,xupd,Pupd,...
+function [ lambdau,xu,Pu,r_update,x_update,p_update] = hypo_update( lambdau,xu,Pu,bestAssign,rupd,xupd,Pupd,...
     rnew,xnew,Pnew,rout,xout,Pout,n,m,model,nCost )
 %Update single target hypothesis according to the assignment
 
@@ -16,6 +16,7 @@ else
     
     % Generate cost function
     [C,r_hat,x_hat,P_hat] = cost(phi,h_r,h_x,h_p,model);
+    
     
     % Solve linear transport problem
     [Cmin,phi] = LP_transport(C,pn,ph);
@@ -41,8 +42,12 @@ else
     PP = cat(3,P_hat,Pout);
 end
 
+idx = rr < 0.1;
+lambdau = [lambdau rr(idx)'];
+xu = [xu xx(:,idx)];
+Pu = cat(3,Pu,PP(:,:,idx));
 % Prune low track weights
-idx = rr > model.threshold;
+idx = rr > 0.1;
 r_update = rr(idx);
 x_update = xx(:,idx);
 p_update = PP(:,:,idx);

@@ -5,7 +5,7 @@ M = length(w);
 r = reshape(rr,numel(rr),1);
 x = reshape(xx,dim,size(xx,2)*size(xx,3));
 P = reshape(PP,dim,dim,size(PP,3)*size(PP,4));
-idx = rr~=0;
+idx = r~=0;
 r = r(idx);
 x = x(:,idx);
 P = P(:,:,idx);
@@ -29,14 +29,9 @@ for i = 1:H
     end
 end
 
-phi(:,all(phi==0,1))=[];
 ph = sum(phi,2);
 pn = sum(phi,1)';
 
-%-----
-% ph(ph>=1) = 1;
-% pn(pn>=1) = 1;
-%-----
 
 
 end

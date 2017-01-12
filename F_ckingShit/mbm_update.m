@@ -31,7 +31,7 @@ for i = 1:n
         try
             wupd(i,j+1) = r(i)*Pd*mvnpdf(v,0,S);
         catch
-            wupd(i,j+1) = eps;
+            wupd(i,j+1) = 0;
         end
         xupd(:,i,j+1) = x(:,i) + K*v;
         Pupd(:,:,i,j+1) = Pplus;

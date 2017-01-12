@@ -27,9 +27,6 @@ cost = -log(wupd(:,2:end)./repmat(wupd(:,1),1,m));
 [r_update,x_update,p_update] = hypo_update(bestAssign,rupd,xupd,Pupd,...
     rnew,xnew,Pnew,rout,xout,Pout,n,m,model,nCost);
 
-% Best state extraction
-x_est = state_extract(r_update,x_update);
-
 % Prune and recycle low track weights
 idx = r_update <= model.recycleThreshold;
 lambdau = [lambdau;r_update(idx)];
@@ -40,4 +37,9 @@ idx = r_update > model.recycleThreshold;
 r_update = r_update(idx);
 x_update = x_update(:,idx);
 p_update = p_update(:,:,idx);
+
+% Best state extraction
+x_est = state_extract(r_update,x_update);
+
+
 

@@ -24,7 +24,7 @@ cost = -log(wupd(:,2:end)./repmat(wupd(:,1),1,m));
 [bestAssign, nCost] = mbestwrap_updt_custom(cost,model.M,wnew);
 
 % Update single target hypothesis
-[r_update,x_update,p_update] = hypo_update(bestAssign,rupd,xupd,Pupd,...
+[lambdau,xu,Pu,r_update,x_update,p_update] = hypo_update(lambdau,xu,Pu,bestAssign,rupd,xupd,Pupd,...
     rnew,xnew,Pnew,rout,xout,Pout,n,m,model,nCost);
 
 % Best state extraction

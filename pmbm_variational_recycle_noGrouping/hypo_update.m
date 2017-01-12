@@ -20,18 +20,17 @@ else
     % Solve linear transport problem
     [Cmin,phi] = LP_transport(C,pn,ph);
     temp = Cmin;
-    indicator = 0;
     maxIterations = 1e2;
     iteration = 0;
-    while indicator == 0
+    while(1)
         [C,r_temp,x_temp,P_temp] = cost(phi,h_r,h_x,h_p,model);
         [Cmin,phi] = LP_transport(C,pn,ph);
         iteration = iteration + 1;
         if (abs(temp - Cmin) < 1e-3) || (iteration > maxIterations)
-            indicator = 1;
             r_hat = r_temp;
             x_hat = x_temp;
             P_hat = P_temp;
+            break;
         else
             temp = Cmin;
         end
