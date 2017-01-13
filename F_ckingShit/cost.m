@@ -29,9 +29,7 @@ for j = 1:N
         end
     end
 end
-% Cmax = -log(eps);
-% C(C>Cmax) = Cmax;
-% C(isnan(C)) = Cmax;
+C(isnan(C)) = inf;
 
 end
 

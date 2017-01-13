@@ -10,7 +10,7 @@ for k = 1:length(simulationData)
     eval([v '= data.averGospa;']);
 end
 %%
-x = '_30_75';
+x = '_coal_10_98';
 glmb = eval(strcat('glmb',x));
 lmb = eval(strcat('lmb_merge',x));
 pmbm = eval(strcat('pmbm',x));
@@ -21,17 +21,28 @@ pmb_recycle = eval(strcat('pmb_recycle',x));
 figure(1)
 for i = 1:4
     subplot(2,2,i)
+    plot(glmb(:,i),'LineWidth',1);
     hold on
     grid on
-    xlabel('time step')
-    ylabel('Mean GOSPA')
-    plot(glmb(:,i),'LineWidth',1);
+    box on
     plot(lmb(:,i),'LineWidth',1);
     plot(pmbm(:,i),'LineWidth',1);
     plot(pmbm_recycle(:,i),'LineWidth',1);
     plot(pmb(:,i),'LineWidth',1);
     plot(pmb_recycle(:,i),'LineWidth',1);
-    legend('GLMB','LMB','PMBM w/o recycling','PMBM w/ recycling','PMB w/o recycling','PMB w/ recycling')
+    lgd = legend('\delta-GLMB','LMB','PMBM w/o recycling','PMBM w/ recycling','PMB w/o recycling','PMB w/ recycling','Location','best');
+    lgd.FontSize = 6;
+    xlabel('time step')
+    switch i
+        case 1
+            ylabel('Mean GOSPA (Total)');
+        case 2
+            ylabel('Mean GOSPA (Loc)')
+        case 3
+            ylabel('Mean GOSPA (Missed)')
+        case 4
+            ylabel('Mean GOSPA (False)')
+    end
 end
 %%
 % N = truth.total_tracks;

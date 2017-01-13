@@ -1,8 +1,9 @@
 function [ w,rr_hat,xx_hat,PP_hat ] = new_assignment( ph,h_r,h_x,h_p,phi,C,N,model )
 
 C = C./(phi+eps);
-P0 = C';
+P0 = abs(C');
 P0 = P0 - min(P0(:));
+P0(P0>-log(eps)) = -log(eps);
 [assignments, costs] = murty_custom(P0,model.M);
 costs = costs + (min(P0(:)).*sum(assignments>0,2))';
 w = exp(-costs-logsumexp(-costs))';
