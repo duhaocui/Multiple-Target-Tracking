@@ -22,12 +22,16 @@ C = zeros(H,N);
 for j = 1:N
     for h = 1:H
         temp = trace(P_hat(:,:,j)\h_p(:,:,h)) + v(:,h,j)'/P_hat(:,:,j)*v(:,h,j) + log(det(2*pi*P_hat(:,:,j)));
-        C(h,j) = -(1-h_r(h))*log(1-r_hat(j)) - h_r(h)*log(r_hat(j)) + h_r(h)/2*temp;
+        if r_hat(j)==1 && h_r(h)==1
+            C(h,j) = h_r(h)/2*temp;
+        else
+            C(h,j) = -(1-h_r(h))*log(1-r_hat(j)) - h_r(h)*log(r_hat(j)) + h_r(h)/2*temp;
+        end
     end
 end
-Cmax = -log(eps);
-C(C>Cmax) = Cmax;
-C(isnan(C)) = Cmax;
+% Cmax = -log(eps);
+% C(C>Cmax) = Cmax;
+% C(isnan(C)) = Cmax;
 
 end
 

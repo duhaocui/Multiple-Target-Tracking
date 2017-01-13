@@ -3,10 +3,10 @@ dbstop if error
 warning('off','all');
 
 % Generate model
-model= gen_model;
+model= gen_model2;
 % Monte Carlo simulations
-numTrial = 100;
-K = 100;
+numTrial = 1;
+K = 10;
 % GOSPA parameters
 gospa_p= 1;
 gospa_c= 100;
@@ -14,10 +14,10 @@ gospa_alpha= 2;
 
 gospa_vals= zeros(K,4,numTrial);
 
-parfor trial = 1:numTrial
+for trial = 1:numTrial
 
     % Generate ground truth
-    truth= gen_truth(model);
+    truth= gen_truth2(model);
     
     % Generate measurements
     meas=  gen_meas(model,truth);
@@ -31,14 +31,14 @@ parfor trial = 1:numTrial
     P = zeros(dim,dim,n);
     
     % Unknown target PPP parameters
-    lambdau = model.lambdab;
-    %lambdau = model.lambdau;
+    %lambdau = model.lambdab;
+    lambdau = model.lambdau;
     xu = model.xb;
     Pu = model.Pb;
     
     % Loop through time
     for t = 1:K
-        
+        t
         % Predict
         [r,x,P,lambdau,xu,Pu] = predict(r,x,P,lambdau,xu,Pu,model);
         
