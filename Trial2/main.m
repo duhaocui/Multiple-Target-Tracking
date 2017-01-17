@@ -14,7 +14,7 @@ gospa_alpha= 2;
 
 gospa_vals= zeros(K,4,numTrial);
 
-parfor trial = 1:numTrial
+for trial = 1:numTrial
 
     % Generate ground truth
     truth= gen_truth2(model);
