@@ -2,15 +2,15 @@ clc;clear
 dbstop if error
 
 % Generate model
-model = gen_model2;
+model = gen_model;
 
-lambdau = model.lambdau;
+lambdau = model.lambdab;
 xu = model.xb;
 Pu = model.Pb;
 
 % Monte Carlo simulations
 numTrial = 1;
-K = 101; % simulation time steps
+K = 100; % simulation time steps
 
 % GOSPA parameters
 gospa_p= 1;
@@ -21,7 +21,7 @@ gospa_vals= zeros(100,4,numTrial);
 for trial = 1:numTrial
     
     % Generate ground truth
-    truth = gen_truth2(model);
+    truth = gen_truth(model);
     
     % Generate measurements
     meas =  gen_meas(model,truth);
@@ -40,7 +40,7 @@ for trial = 1:numTrial
         [r,x,P,lambdau,xu,Pu] = predict(r,x,P,lambdau,xu,Pu,model);
         
         % Update step
-        [lambdau,r,x,P,x_est] = updating(lambdau,xu,Pu,r,x,P,meas.Z{t},model);
+        [lambdau,xu,Pu,r,x,P,x_est] = updating(lambdau,xu,Pu,r,x,P,meas.Z{t},model);
         
         % Performance evaluation using GOSPA metric
         [gospa_vals(t,1,trial), gospa_vals(t,2,trial),...
