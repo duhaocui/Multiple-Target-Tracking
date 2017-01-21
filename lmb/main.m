@@ -1,14 +1,14 @@
 dbstop if error
 numTrial = 100;
-model= gen_model2;
+model= gen_model;
 % GOSPA parameters
 gospa_p= 1;
 gospa_c= 100;
 gospa_alpha= 2;
-gospa_vals= zeros(101,4,numTrial);
+gospa_vals= zeros(100,4,numTrial);
 
 parfor trial = 1:numTrial
-    truth= gen_truth2(model);
+    truth= gen_truth(model);
     meas=  gen_meas(model,truth);
     est=   run_filter(model,meas);
 

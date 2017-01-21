@@ -4,12 +4,8 @@ dbstop if error
 % Generate model
 model = gen_model;
 
-lambdau = model.lambdau;
-xu = model.xb;
-Pu = model.Pb;
-
 % Monte Carlo simulations
-numTrial = 1;
+numTrial = 100;
 K = 100; % simulation time steps
 
 % GOSPA parameters
@@ -18,7 +14,8 @@ gospa_c= 100;
 gospa_alpha= 2;
 gospa_vals= zeros(100,4,numTrial);
 
-for trial = 1:numTrial
+parfor trial = 1:numTrial
+    
     % Generate ground truth
     truth = gen_truth(model);
     
@@ -32,25 +29,23 @@ for trial = 1:numTrial
     x = zeros(dim,n);
     P = zeros(dim,dim,n);
     
-    % Initial estimation
-    est.X= cell(K,1);
+    lambdau = model.lambdab;
+    xu = model.xb;
+    Pu = model.Pb;
     
     % Loop through time
     for t = 1:K
-        t
+        
         % Predict step
         [r,x,P,lambdau,xu,Pu] = predict(r,x,P,lambdau,xu,Pu,model);
         
         % Update step
-        [lambdau,r,x,P,est.X{t}] = updating(lambdau,xu,Pu,r,x,P,meas.Z{t},model);
+        [lambdau,r,x,P,x_est] = updating(lambdau,xu,Pu,r,x,P,meas.Z{t},model);
         
         % Performance evaluation using GOSPA metric
-        [gospa_vals(t,1,trial), gospa_vals(t,2,trial),...
-            gospa_vals(t,3,trial), gospa_vals(t,4,trial)] = ...
-            gospa_dist(get_comps(truth.X{t},[1 3]),get_comps(est.X{t},[1 3])...
-            ,gospa_c,gospa_p,gospa_alpha);
+        gospa_vals(t,:,trial) = gospa_dist(get_comps(truth.X{t},[1 3]),...
+            get_comps(x_est,[1 3]),gospa_c,gospa_p,gospa_alpha);
     end
-    trial
     
 end
 

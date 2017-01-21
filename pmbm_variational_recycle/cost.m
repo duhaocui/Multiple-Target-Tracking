@@ -6,6 +6,7 @@ x_hat = zeros(dim,N);
 P_hat = zeros(dim,dim,N);
 v = zeros(dim,H,N);
 
+% Avoid numerical error
 phi = phi + eps;
 r_hat = (h_r*phi)';
 r_hat(r_hat>=1) = 1-eps;
@@ -26,7 +27,6 @@ for j = 1:N
         C(h,j) = -(1-h_r(h))*log(1-r_hat(j)) - h_r(h)*log(r_hat(j)) + h_r(h)/2*temp;
     end
 end
-
 
 end
 

@@ -45,26 +45,45 @@ for i = 1:4
     end
 end
 %%
-% N = truth.total_tracks;
-% tracks = cell(N,1);
+N = truth.total_tracks;
+tracks = cell(N,1);
+for i = 1:N
+    tracks{i} = zeros(2,101);
+    for j = 1:101
+        tracks{i}(:,j) = truth.X{j}([1,3],i);
+    end
+end
+figure(1)
+subplot(2,1,1)
+hold on
+for i = 1:N
+    plot(0:100,tracks{i}(1,:));
+end
+xlabel('time step')
+ylabel('Position(x)')
+subplot(2,1,2)
+hold on
+for i = 1:N
+    plot(0:100,tracks{i}(2,:));
+end
+xlabel('time step')
+ylabel('Position(y)')
+
 % for i = 1:N
-%     tracks{i} = zeros(2,101);
-%     for j = 1:101
-%         tracks{i}(:,j) = truth.X{j}([1,3],i);
-%     end
+%     plot3(tracks{i}(1,:),tracks{i}(2,:),0:100);
+%     hold on
 % end
-% figure(1)
-% subplot(2,1,1)
-% hold on
-% for i = 1:N
-%     plot(0:100,tracks{i}(1,:));
-% end
-% xlabel('time step')
-% ylabel('Position(x)')
-% subplot(2,1,2)
-% hold on
-% for i = 1:N
-%     plot(0:100,tracks{i}(2,:));
-% end
-% xlabel('time step')
-% ylabel('Position(y)')
+
+%%
+[X_track,k_birth,k_death]= extract_tracks(truth.X,truth.track_list,truth.total_tracks);
+
+%plot ground truths
+limit= [ model.range_c(1,1) model.range_c(1,2) model.range_c(2,1) model.range_c(2,2) 1 100];
+figure; truths= gcf;
+for i=1:truth.total_tracks
+    Pt= X_track(:,k_birth(i):1:k_death(i),i); Pt=Pt([1 3],:);
+    plot3( Pt(1,:),Pt(2,:),k_birth(i):k_death(i)); 
+    hold on
+end
+axis(limit); title('Ground Truths');
+grid on

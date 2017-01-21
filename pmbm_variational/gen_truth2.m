@@ -13,8 +13,7 @@ numTruth = 6; % number of targets
 birthtime = zeros(numTruth,1);
 
 x = chol(Pmid)'*randn(size(model.F,1),numTruth);
-xf = x; 
-xb = x;
+xf = x; xb = x;
 truth.X{midpoint} = x;
 truth.N(midpoint) = size(x,2);
 

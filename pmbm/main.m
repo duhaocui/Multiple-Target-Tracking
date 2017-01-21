@@ -4,7 +4,7 @@ dbstop if error
 model= gen_model2;
 
 % Monte Carlo simulations
-numTrial = 100;
+numTrial = 1;
 K = 101; % time steps
 
 % GOSPA parameters

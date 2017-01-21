@@ -13,4 +13,4 @@ for j=1:plength
     valid_idx= union(valid_idx,find( dist < model.gamma ));
 end
 z_gate = z(:,valid_idx);
-[~,idx_out] = setdiff(z(1,:),z_gate(1,:),'stable');
+idx_out = setdiff(1:length(z),valid_idx);
