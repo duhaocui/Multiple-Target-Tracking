@@ -52,10 +52,13 @@ for g = 1:numGroups
     [C,r_hat,x_hat,P_hat] = cost(phi,h_r,h_x,h_p,model);
     [Cmin,phi] = LP_transport(C,pn,ph);
     temp = Cmin;
+    maxIteration = 100;
+    iteration = 0;
     while(1)
+        iteration = iteration + 1;
         [C,r_temp,x_temp,P_temp] = cost(phi,h_r,h_x,h_p,model);
         [Cmin,phi] = LP_transport(C,pn,ph);
-        if temp - Cmin < 1e-3 && temp >= Cmin
+        if temp - Cmin < 1e-3 && temp >= Cmin || iteration == maxIteration
             r_hat = r_temp;
             x_hat = x_temp;
             P_hat = P_temp;
@@ -79,3 +82,4 @@ lambdau = (1-model.Pd)*lambdau;
 [lambdau,xu,Pu] = recycling(rr,xx,PP,lambdau,xu,Pu,model);
 % Best state extraction
 x_est = state_extract(r_update,x_update);
+

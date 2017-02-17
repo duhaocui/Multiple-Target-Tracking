@@ -33,13 +33,15 @@ lambdau = [lambdau;r_update(idx)];
 xu = [xu x_update(:,idx)];
 Pu = cat(3,Pu,p_update(:,:,idx));
 
+% Best state extraction
+x_est = state_extract(r_update,x_update);
+
 idx = r_update > model.recycleThreshold;
 r_update = r_update(idx);
 x_update = x_update(:,idx);
 p_update = p_update(:,:,idx);
 
-% Best state extraction
-x_est = state_extract(r_update,x_update);
+
 
 
 

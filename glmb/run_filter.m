@@ -8,14 +8,14 @@ est.N= zeros(meas.K,1);
 est.L= cell(meas.K,1);
 
 %filter parameters
-filter.H_bth= 20;                    %requested number of birth components/hypotheses
-filter.H_sur= 20;                 %requested number of surviving components/hypotheses
-filter.H_upd= 100;                 %requested number of updated components/hypotheses
-filter.H_max= 100;                 %cap on number of posterior components/hypotheses
-filter.hyp_threshold= 1e-3;        %pruning threshold for components/hypotheses
+filter.H_bth= 15;                    %requested number of birth components/hypotheses
+filter.H_sur= 3000;                 %requested number of surviving components/hypotheses
+filter.H_upd= 3000;                 %requested number of updated components/hypotheses
+filter.H_max= 3000;                 %cap on number of posterior components/hypotheses
+filter.hyp_threshold= 1e-5;        %pruning threshold for components/hypotheses
 
 filter.L_max= 100;                  %limit on number of Gaussians in each track - not implemented yet
-filter.elim_threshold= 1e-3;        %pruning threshold for Gaussians in each track - not implemented yet
+filter.elim_threshold= 1e-4;        %pruning threshold for Gaussians in each track - not implemented yet
 filter.merge_threshold= 4;          %merging threshold for Gaussians in each track - not implemented yet
 
 filter.P_G= 0.999;                           %gate size in percentage
@@ -35,7 +35,7 @@ glmb_update.cdn= 1;             %cardinality distribution of GLMB (vector of car
 
 %recursive filtering
 for k=1:meas.K
-    
+    k
     %prediction and update
     glmb_predict= predict(glmb_update,model,filter,k);          
     glmb_update= update(glmb_predict,model,filter,meas,k);     
@@ -107,9 +107,8 @@ for pidx=1:length(glmb_update.w)
         %calculate best surviving hypotheses/components
         costv= model.P_S/model.Q_S*ones(glmb_update.n(pidx),1);                                                                     %cost vector
         neglogcostv= -log(costv);                                                                                                   %negative log cost
-        %[spaths,nlcost]= kshortestwrap_pred(neglogcostv,round(filter.H_sur*sqrt(glmb_update.w(pidx))/sum(sqrt(glmb_update.w))));    %k-shortest path to calculate k-best surviving hypotheses/components
-        [spaths,nlcost]= kshortestwrap_pred(neglogcostv,filter.H_sur);
-        
+        [spaths,nlcost]= kshortestwrap_pred(neglogcostv,ceil(filter.H_sur*sqrt(glmb_update.w(pidx)/sum(sqrt(glmb_update.w)))));    %k-shortest path to calculate k-best surviving hypotheses/components
+%         [spaths,nlcost]= kshortestwrap_pred(neglogcostv,filter.H_sur);
         %generate corrresponding surviving hypotheses/components
         for hidx=1:length(nlcost)
             survive_hypcmp_tmp= spaths{hidx}(:);
@@ -201,7 +200,7 @@ else %loop over predicted components/hypotheses
             %calculate best updated hypotheses/components
             costm= model.P_D/model.Q_D*allcostm(glmb_predict.I{pidx},:)/(model.lambda_c*model.pdf_c);                                           %cost matrix
             neglogcostm= -log(costm);                                                                                                           %negative log cost
-            [uasses,nlcost]= mbestwrap_updt_custom(neglogcostm,ceil(filter.H_upd*sqrt(glmb_predict.w(pidx))/sum(sqrt(glmb_predict.w))));    	%murty's algo to calculate m-best assignment hypotheses/components
+            [uasses,nlcost]= mbestwrap_updt_custom(neglogcostm,ceil(filter.H_upd*sqrt(glmb_predict.w(pidx)/sum(sqrt(glmb_predict.w)))));    	%murty's algo to calculate m-best assignment hypotheses/components
             %[uasses,nlcost]= mbestwrap_updt_custom(neglogcostm,filter.H_upd);
             
             %generate corrresponding surviving hypotheses/components

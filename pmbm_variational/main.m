@@ -2,7 +2,7 @@ clc;clear
 dbstop if error
 
 % Generate model
-model = gen_model;
+model = gen_model(0.75,10);
 
 % Monte Carlo simulations
 numTrial = 100;
@@ -50,5 +50,5 @@ parfor trial = 1:numTrial
 end
 
 averGospa = mean(gospa_vals,3);
-mean(averGospa)
+save pmb_10_75_test averGospa
 

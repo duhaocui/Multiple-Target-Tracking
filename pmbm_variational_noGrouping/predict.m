@@ -29,7 +29,7 @@ for k = 1:nu
 end
 
 % Incorporate birth intensity into PPP
-lambdau = [lambdau lambdab];
+lambdau = [lambdau;lambdab];
 xu = [xu xb];
 Pu = cat(3,Pu,Pb);
 

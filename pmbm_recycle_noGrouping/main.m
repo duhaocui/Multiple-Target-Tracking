@@ -1,9 +1,9 @@
 clc;clear
 dbstop if error
 % Generate model
-model= gen_model2;
+model= gen_model2(0.75,30);
 % Monte Carlo simulations
-numTrial = 100;
+numTrial = 1;
 K = 101;
 % GOSPA parameters
 gospa_p= 1;
@@ -11,7 +11,7 @@ gospa_c= 100;
 gospa_alpha= 2;
 gospa_vals= zeros(K,4,numTrial);
 
-parfor trial = 1:numTrial
+for trial = 1:numTrial
     
     % Generate ground truth
     truth= gen_truth2(model);
@@ -19,29 +19,26 @@ parfor trial = 1:numTrial
     % Generate measurements
     meas=  gen_meas(model,truth);
     
-    % State dimension
-    dim = model.x_dim;
     % Multi-Bernoulli representation
     n = 0;
     r = cell(0,1);
     r{1} = zeros(n,1);
     x = cell(0,1);
-    x{1} = zeros(dim,n);
+    x{1} = zeros(4,n);
     P = cell(0,1);
-    P{1} = zeros(dim,dim,n);
+    P{1} = zeros(4,4,n);
     lambdau = cell(1,1);
     xu = cell(1,1);
     Pu = cell(1,1);
     w_update = 1;
     
     % Unknown target PPP parameters
-%     lambdau{1} = model.lambdab';
     lambdau{1} = model.lambdau;
     xu{1} = model.xb;
     Pu{1} = model.Pb;
     
     for t = 1:K
-        
+        t
         % Predict
         [r,x,P,lambdau,xu,Pu] = predict(r,x,P,lambdau,xu,Pu,model);
         

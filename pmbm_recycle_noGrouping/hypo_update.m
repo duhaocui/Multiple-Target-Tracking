@@ -1,44 +1,38 @@
-function [ rMurty,xMurty,pMurty,lambdau_upd,xu_upd,pu_upd ] = hypo_update( bestAssign,rupd,xupd,Pupd,...
-    rnew,xnew,Pnew,n,m,nCost,M,model,lambdau,xu,Pu,valid_idx,idx_out )
+function [ rMurty,xMurty,pMurty,lambdauMurty,xuMurty,PuMurty ] = hypo_update( bestAssign,rupd,xupd,Pupd,...
+    rnew,xnew,Pnew,nCost,valid_idx,idx_out,lambdau,xu,Pu,model )
 %Update single target hypothesis according to the assignment
-if isempty(nCost)
-    M = 1;
-    rMurty = cell(1,1);
-    xMurty = cell(1,1);
-    pMurty = cell(1,1);
-    lambdau_upd = cell(1,1);
-    xu_upd = cell(1,1);
-    pu_upd = cell(1,1);
-else
-    rMurty = cell(M,1);
-    xMurty = cell(M,1);
-    pMurty = cell(M,1);
-    lambdau_upd = cell(M,1);
-    xu_upd = cell(M,1);
-    pu_upd = cell(M,1);
-end
 
-for assign = 1:M
-    [rr,xx,PP] = make_assign(assign,bestAssign,rupd,xupd,Pupd,...
-        rnew(valid_idx),xnew(:,valid_idx),Pnew(:,:,valid_idx),n,m);
+M = length(nCost);
+rMurty = cell(M,1);
+xMurty = cell(M,1);
+pMurty = cell(M,1);
+
+lambdauMurty = cell(M,1);
+xuMurty = cell(M,1);
+PuMurty = cell(M,1);
+
+for i = 1:M
+    [rr,xx,PP] = make_assign(bestAssign(i,:),rupd,xupd,Pupd,...
+        rnew(valid_idx),xnew(:,valid_idx),Pnew(:,:,valid_idx));
     
     rr = cat(1,rr,rnew(idx_out));
     xx = cat(2,xx,xnew(:,idx_out));
     PP = cat(3,PP,Pnew(:,:,idx_out));
     
     % Prune low track weights
-    idx = rr > model.threshold;
-    rMurty{assign} = rr(idx);
-    xMurty{assign} = xx(:,idx);
-    pMurty{assign} = PP(:,:,idx);
+    idx = rr > model.H_threshold;
+    rMurty{i} = rr(idx);
+    xMurty{i} = xx(:,idx);
+    pMurty{i} = PP(:,:,idx);
     
-    % Recycle low weight track
-    idx_recycle = rr <=model.threshold;
+    % Recycling
+    idx = (rr < model.threshold) & idx;
+    lambdauMurty{i} = [lambdau;rr(idx)];
+    xuMurty{i} = [xu xx(:,idx)];
+    PuMurty{i} = cat(3,Pu,PP(:,:,idx));
     
-    % Append recycling MB component to PPP
-    lambdau_upd{assign} = [lambdau;rr(idx_recycle)];
-    xu_upd{assign} = [xu xx(:,idx_recycle)];
-    pu_upd{assign} = cat(3,Pu,PP(:,:,idx_recycle));
+%     [lambdauMurty{i},xuMurty{i},PuMurty{i}] = ...
+%         gaus_merge(lambdauMurty{i},xuMurty{i},PuMurty{i},1);
     
 end
 

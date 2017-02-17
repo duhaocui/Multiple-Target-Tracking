@@ -1,4 +1,4 @@
-function [ wupd, rupd, xupd, Pupd ] = mbm_update( z, n, r, x, P, model )
+function [ wupd, rupd, xupd, Pupd ] = mbm_update( z, r, x, P, model )
 
 % Interpret sizes from inputs
 Pd = model.Pd;
@@ -6,6 +6,7 @@ H = model.H;
 R = model.R;
 stateDimensions = model.x_dim;
 m = size(z,2);
+n = length(r);
 
 %Update existing tracks
 wupd = zeros(n,m+1);

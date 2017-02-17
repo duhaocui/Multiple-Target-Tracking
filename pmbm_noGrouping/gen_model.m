@@ -1,4 +1,4 @@
-function model= gen_model
+function model= gen_model(pd,lambda)
 
 % basic parameters
 model.x_dim= 4;   %dimension of state vector
@@ -22,16 +22,16 @@ model.D= diag([ 10; 10 ]);
 model.R= model.D*model.D';              %observation noise covariance
 
 % detection parameters
-model.Pd= 0.98;   %probability of detection in measurements
+model.Pd= pd;   %probability of detection in measurements
 
 % clutter parameters
-model.lfai= 10;                             %poisson average rate of uniform clutter (per scan)
+model.lfai= lambda;                             %poisson average rate of uniform clutter (per scan)
 model.range_c= [ -1000 1000; -1000 1000 ];      %uniform clutter region
 model.lambda_fa= model.lfai/prod(model.range_c(:,2)-model.range_c(:,1)); %uniform clutter density
 
-model.threshold = 1e-3; % Threshold for pruning low weights track
+model.threshold = 1e-4; % Threshold for pruning low weights track
 model.H_max = 100; % capping threshold
-model.H_threshold = 1e-3; % Pruning threshold
+model.H_threshold = 1e-4; % Pruning threshold
 
 % Initialise new target parameter structure
 birthNum = 4;

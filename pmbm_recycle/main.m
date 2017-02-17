@@ -1,11 +1,11 @@
 clc;clear
 dbstop if error
 % Generate model
-model= gen_model2;
+model= gen_model(0.75,30);
 
 % Monte Carlo simulations
-numTrial = 100;
-K = 101; % time steps
+numTrial = 10;
+K = 100; % time steps
 
 % GOSPA parameters
 gospa_p= 1;
@@ -15,7 +15,7 @@ gospa_vals= zeros(K,4,numTrial);
 
 parfor trial = 1:numTrial
     %Generate ground truth
-    truth= gen_truth2(model);
+    truth= gen_truth(model);
     
     % Generate measurements
     meas=  gen_meas(model,truth);
@@ -32,7 +32,7 @@ parfor trial = 1:numTrial
     w_update = 1;
     
     % Unknown target PPP parameters
-    lambdau{1} = model.lambdau;
+    lambdau{1} = model.lambdab;
     xu{1} = model.xb;
     Pu{1} = model.Pb;
     
@@ -46,12 +46,12 @@ parfor trial = 1:numTrial
             updating(lambdau,xu,Pu,r,x,P,meas.Z{t},model,w_update);
         
         % Performance evaluation using GOSPA metric
-        [gospa_vals(t,:,trial)] = gospa_dist(get_comps(truth.X{t},[1 3]),...
-            get_comps(x_est,[1 3]) ,gospa_c,gospa_p,gospa_alpha);
+%         [gospa_vals(t,:,trial)] = gospa_dist(get_comps(truth.X{t},[1 3]),...
+%             get_comps(x_est,[1 3]) ,gospa_c,gospa_p,gospa_alpha);
     end 
 end
 
-averGospa = mean(gospa_vals,3);
-mean(averGospa)
+% averGospa = mean(gospa_vals,3);
+% save pmbm_recycle_30_75 averGospa
 
 

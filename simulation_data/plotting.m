@@ -10,7 +10,7 @@ for k = 1:length(simulationData)
     eval([v '= data.averGospa;']);
 end
 %%
-x = '_coal_10_98';
+x = '_coal_30_75';
 glmb = eval(strcat('glmb',x));
 lmb = eval(strcat('lmb_merge',x));
 pmbm = eval(strcat('pmbm',x));
@@ -55,16 +55,18 @@ for i = 1:N
 end
 figure(1)
 subplot(2,1,1)
+grid on
 hold on
 for i = 1:N
-    plot(0:100,tracks{i}(1,:));
+    plot(0:100,tracks{i}(1,:),'Linewidth',2);
 end
 xlabel('time step')
 ylabel('Position(x)')
 subplot(2,1,2)
+grid on
 hold on
 for i = 1:N
-    plot(0:100,tracks{i}(2,:));
+    plot(0:100,tracks{i}(2,:),'Linewidth',2);
 end
 xlabel('time step')
 ylabel('Position(y)')
@@ -78,12 +80,12 @@ ylabel('Position(y)')
 [X_track,k_birth,k_death]= extract_tracks(truth.X,truth.track_list,truth.total_tracks);
 
 %plot ground truths
-limit= [ model.range_c(1,1) model.range_c(1,2) model.range_c(2,1) model.range_c(2,2) 1 100];
+limit= [ model.range_c(1,1) model.range_c(1,2) model.range_c(2,1) model.range_c(2,2)];
 figure; truths= gcf;
 for i=1:truth.total_tracks
     Pt= X_track(:,k_birth(i):1:k_death(i),i); Pt=Pt([1 3],:);
-    plot3( Pt(1,:),Pt(2,:),k_birth(i):k_death(i)); 
+    plot(Pt(1,:),Pt(2,:),'Linewidth',2); 
     hold on
 end
-axis(limit); title('Ground Truths');
+axis(limit);
 grid on

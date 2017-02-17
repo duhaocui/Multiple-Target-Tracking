@@ -10,6 +10,10 @@ r_update = cell(0,1);
 x_update = cell(0,1);
 p_update = cell(0,1);
 
+rRecycle = cell(0,1);
+xRecycle = cell(0,1);
+pRecycle = cell(0,1);
+
 if isempty(r{1})
     [~,rnew,xnew,Pnew] = ppp_update(lambdau{1},xu{1},Pu{1},z,model);
     lambdau{1} = (1-model.Pd)*lambdau{1};
@@ -62,7 +66,7 @@ for l = 1:len
         Wp2 = Wp/sum(Wp);
         [Wp3,order] = sort(Wp2,'descend');
         Y = cumsum(Wp3);
-        pos = find(Y>=0.999,1);
+        pos = find(Y>=0.99,1);
         group_w{g} = Wp(order(1:pos));
         group_r{g} = group_r{g}(:,order(1:pos));
         group_x{g} = group_x{g}(:,:,order(1:pos));
@@ -97,12 +101,11 @@ for l = 1:len
         end
         
         wMurty(i) = wc;
-%         [rMurty{i},xMurty{i},pMurty{i},r_re{i},x_re{i},P_re{i}] = ...
-%             track_pruning([rr;rout],[xx xout],cat(3,PP,Pout),model);
-        rMurty{i} = [rr;rout];
-        xMurty{i} = [xx xout];
-        pMurty{i} = cat(3,PP,Pout);
-
+        [rMurty{i},xMurty{i},pMurty{i},r_re{i},x_re{i},P_re{i}] = ...
+            track_pruning([rr;rout],[xx xout],cat(3,PP,Pout),model);
+        r_re{i} = [r_re{i};lambdau{l}];
+        x_re{i} = [x_re{i} xu{l}];
+        P_re{i} = cat(3,P_re{i},Pu{l});
     end
     
     w{l} = wMurty*w_update(l)*prod(wout);
@@ -110,26 +113,15 @@ for l = 1:len
     x_update = cat(1,x_update,xMurty);
     p_update = cat(1,p_update,pMurty);
     
+    rRecycle = cat(1,rRecycle,r_re);
+    xRecycle = cat(1,xRecycle,x_re);
+    pRecycle = cat(1,pRecycle,P_re);
+    
 end
 
-% Best state extraction
-x_est = state_extract(w_update,r_update,x_update);
-
-% Prune and recycle low-weight tracks
-N = length(r_update);
-lambdau = cell(N,1);
-xu = cell(N,1);
-Pu = cell(N,1);
-for i = 1:N
-    idx = r_update{i} <= model.recycleThreshold;
-    lambdau{i} = r_update{i}(idx);
-    xu{i} = x_update{i}(:,idx);
-    Pu{i} = p_update{i}(:,:,idx);
-    idx = r_update{i} > model.recycleThreshold;
-    r_update{i} = r_update{i}(idx);
-    x_update{i} = x_update{i}(:,idx);
-    p_update{i} = p_update{i}(:,:,idx);
-end
+lambdau = rRecycle;
+xu = xRecycle;
+Pu = pRecycle;
 
 % Normalisation
 w_update = normalize(cell2mat(w));
@@ -141,3 +133,6 @@ w_update = normalize(cell2mat(w));
 % Capping
 [w_update,r_update,x_update,p_update,lambdau,xu,Pu] = capping(w_update,r_update,...
     x_update,p_update,lambdau,xu,Pu,model.H_max);
+
+% Best state extraction
+x_est = state_extract(w_update,r_update,x_update);

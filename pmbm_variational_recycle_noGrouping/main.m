@@ -1,7 +1,7 @@
 clc;clear
 dbstop if error
 % Generate model
-model= gen_model;
+model= gen_model(0.75,10);
 % Monte Carlo simulations
 numTrial = 100;
 K = 100;
@@ -12,7 +12,7 @@ gospa_alpha= 2;
 gospa_vals= zeros(K,4,numTrial);
 
 parfor trial = 1:numTrial
-    trial
+
     % Generate ground truth
     truth= gen_truth(model);
     
@@ -50,6 +50,6 @@ parfor trial = 1:numTrial
 end
 
 averGospa = mean(gospa_vals,3);
-mean(averGospa)
+save pmb_recycle_10_75 averGospa
 
 

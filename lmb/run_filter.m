@@ -10,16 +10,16 @@ est.L= cell(meas.K,1);
 
 %filter parameters
 filter.T_max= 100;                  %maximum number of tracks
-filter.track_threshold= 1e-3;       %threshold to prune tracks
+filter.track_threshold= 1e-4;       %threshold to prune tracks
 
-filter.H_bth= 20;                    %requested number of birth components/hypotheses (for LMB to GLMB casting before update)
-filter.H_sur= 20;                  %requested number of surviving components/hypotheses (for LMB to GLMB casting before update)
+filter.H_bth= 10;                    %requested number of birth components/hypotheses (for LMB to GLMB casting before update)
+filter.H_sur= 50;                  %requested number of surviving components/hypotheses (for LMB to GLMB casting before update)
 filter.H_upd= 100;                  %requested number of updated components/hypotheses (for GLMB update)
 filter.H_max= 100;                  %cap on number of posterior components/hypotheses (not used yet)
-filter.hyp_threshold= 1e-3;        %pruning threshold for components/hypotheses (not used yet)
+filter.hyp_threshold= 1e-4;        %pruning threshold for components/hypotheses (not used yet)
 
-filter.L_max= 20;                   %limit on number of Gaussians in each track
-filter.elim_threshold= 1e-3;        %pruning threshold for Gaussians in each track
+filter.L_max= 10;                   %limit on number of Gaussians in each track
+filter.elim_threshold= 1e-4;        %pruning threshold for Gaussians in each track
 filter.merge_threshold= 4;          %merging threshold for Gaussians in each track
 
 filter.P_G= 0.999;                           %gate size in percentage
@@ -174,7 +174,7 @@ else %loop over predicted components/hypotheses
             %calculate best updated hypotheses/components
             costm= model.P_D/model.Q_D*allcostm(glmb_predict.I{pidx},:)/(model.lambda_c*model.pdf_c);                                           %cost matrix
             neglogcostm= -log(costm);                                                                                                           %negative log cost
-            [uasses,nlcost]= mbestwrap_updt_custom(neglogcostm,ceil(filter.H_upd*sqrt(glmb_predict.w(pidx))/sum(sqrt(glmb_predict.w))));    	%murty's algo to calculate m-best assignment hypotheses/components
+            [uasses,nlcost]= mbestwrap_updt_custom(neglogcostm,ceil(filter.H_upd*sqrt(glmb_predict.w(pidx)/sum(sqrt(glmb_predict.w)))));    	%murty's algo to calculate m-best assignment hypotheses/components
             
             %generate corrresponding surviving hypotheses/components
             for hidx=1:length(nlcost)

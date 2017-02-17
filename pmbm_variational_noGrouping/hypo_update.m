@@ -1,7 +1,9 @@
-function [ r_update,x_update,p_update] = hypo_update( bestAssign,rupd,xupd,Pupd,...
-    rnew,xnew,Pnew,rout,xout,Pout,n,m,model,nCost )
+function [ r_update,x_update,p_update,lambdau,xu,Pu] = hypo_update( bestAssign,rupd,xupd,Pupd,...
+    rnew,xnew,Pnew,rout,xout,Pout,model,nCost,lambdau,xu,Pu,IF_recycle )
 %Update single target hypothesis according to the assignment
 
+n = size(rupd,1);
+m = length(rnew);
 % Making assignments
 [rr,xx,PP] = make_assign(bestAssign,rupd,xupd,Pupd,rnew,...
     xnew,Pnew,n,m,model);
@@ -12,7 +14,7 @@ if isempty(w)
     PP = cat(3,PP,Pout);
 else
     % Generate q(h,j) r_h,x_h,P_h
-    [pn,ph,phi,h_r,h_x,h_p] = hypo_all(w,rr,xx,PP,m,n,model);
+    [pn,ph,phi,h_r,h_x,h_p] = hypo_all(w,rr,xx,PP,m+n,model);
     
     % Generate cost function
     [C,r_hat,x_hat,P_hat] = cost(phi,h_r,h_x,h_p,model);
@@ -26,7 +28,7 @@ else
         [C,r_temp,x_temp,P_temp] = cost(phi,h_r,h_x,h_p,model);
         [Cmin,phi] = LP_transport(C,pn,ph);
         iteration = iteration + 1;
-        if (temp - Cmin < 1e-3 && temp >= Cmin) || (iteration > maxIterations)
+        if (temp - Cmin < model.H_threshold && temp >= Cmin) || (iteration > maxIterations)
             r_hat = r_temp;
             x_hat = x_temp;
             P_hat = P_temp;
@@ -42,10 +44,21 @@ else
 end
 
 % Prune low track weights
-idx = rr > model.threshold;
-r_update = rr(idx);
-x_update = xx(:,idx);
-p_update = PP(:,:,idx);
+if IF_recycle
+    idx = rr > model.threshold;
+    r_update = rr(idx);
+    x_update = xx(:,idx);
+    p_update = PP(:,:,idx);
+    idx = (rr > model.H_threshold) & (rr < model.threshold);
+    lambdau = [lambdau;rr(idx)];
+    xu = [xu xx(:,idx)];
+    Pu = cat(3,Pu,PP(:,:,idx));
+else
+    idx = rr > model.H_threshold;
+    r_update = rr(idx);
+    x_update = xx(:,idx);
+    p_update = PP(:,:,idx);
+end
 
 
 end
