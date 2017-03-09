@@ -1,10 +1,10 @@
 clc;clear
 dbstop if error
 % Generate model
-model= gen_model(0.75,30);
+model= gen_model(0.98,10);
 
 % Monte Carlo simulations
-numTrial = 10;
+numTrial = 50;
 K = 100; % time steps
 
 % GOSPA parameters
@@ -46,12 +46,12 @@ parfor trial = 1:numTrial
             updating(lambdau,xu,Pu,r,x,P,meas.Z{t},model,w_update);
         
         % Performance evaluation using GOSPA metric
-%         [gospa_vals(t,:,trial)] = gospa_dist(get_comps(truth.X{t},[1 3]),...
-%             get_comps(x_est,[1 3]) ,gospa_c,gospa_p,gospa_alpha);
+        [gospa_vals(t,:,trial)] = gospa_dist(get_comps(truth.X{t},[1 3]),...
+            get_comps(x_est,[1 3]) ,gospa_c,gospa_p,gospa_alpha);
     end 
 end
 
-% averGospa = mean(gospa_vals,3);
-% save pmbm_recycle_30_75 averGospa
+averGospa = mean(gospa_vals,3);
+
 
 

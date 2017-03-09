@@ -54,7 +54,7 @@ for l = 1:len
         cost = -log(wupd(:,2:end)./repmat(wnew',n,1));
         
         % Find M-best assignment
-        Mt = ceil(model.H_max*sqrt(w_update(l)/sum(sqrt(w_update))));
+        Mt = ceil(model.H_max*sqrt(w_update(l)));
         
         [bestAssign, nCost] = mbestwrap_updt_custom(cost,Mt,wupd(:,1));
         

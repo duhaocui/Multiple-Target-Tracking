@@ -1,10 +1,10 @@
 clc;clear
 dbstop if error
 % Generate model
-model= gen_model(0.98,30);
+model= gen_model(0.75,30);
 
 % Monte Carlo simulations
-numTrial = 100;
+numTrial = 30;
 K = 100; % time steps
 
 % GOSPA parameters
@@ -55,6 +55,6 @@ parfor trial = 1:numTrial
 end
 
 averGospa = mean(gospa_vals,3);
-save pmbm_30_98 averGospa
+
 
 
